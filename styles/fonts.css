@@ -1,0 +1,72 @@
+/* ---------------------------------------------------------------------------
+   Self-hosted webfonts.
+
+   Order of preference in `--font-display` (app/globals.css):
+     "Cindie Mono"  ->  "Space Mono"  ->  system monospace stack
+   --------------------------------------------------------------------------- */
+
+/*
+ * 1. Cindie Mono by Lewis McGuffie — the typeface this site is designed for.
+ *
+ * It is a COMMERCIAL face (sold through East of Rome / FutureFonts; the
+ * designer also hands out trial cuts by email). It is deliberately not vendored
+ * here. When installed locally, it takes over automatically; otherwise the
+ * bundled Space Mono face is used without a network request.
+ *
+ * Cindie ships in four widths, so a real licence will likely add more faces:
+ * copy this block and set `font-weight` / `font-style` to match.
+ */
+@font-face {
+  font-family: "Cindie Mono";
+  src: local("Cindie Mono");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+ * 2. Space Mono — heading/title stand-in, used until Cindie Mono is in place.
+ *
+ * SIL Open Font License 1.1 (see public/assets/fonts/SpaceMono-OFL.txt).
+ * An optotype-inspired display monospace with softened corners, which is the
+ * closest freely licensable relative of Cindie Mono's character.
+ */
+@font-face {
+  font-family: "Space Mono";
+  src: url("/assets/fonts/SpaceMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Space Mono";
+  src: url("/assets/fonts/SpaceMono-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+ * 3. Space Grotesk — the body/description face.
+ *
+ * Everything that is not a heading, label or HUD control is set in this, so
+ * paragraphs stay comfortably readable instead of being in monospace. It is the
+ * grotesque that Space Mono was derived from, so the two pair by design.
+ * SIL Open Font License 1.1 (see public/assets/fonts/SpaceGrotesk-OFL.txt).
+ */
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/assets/fonts/SpaceGrotesk-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/assets/fonts/SpaceGrotesk-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}

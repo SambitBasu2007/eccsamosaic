@@ -1,0 +1,24 @@
+/* Logo mark — the only logo in the hero, sized to read clearly. */
+
+.hero-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.hero-logo__mark {
+  /* Width keeps the complete event mark legible across phone and desktop sizes. */
+  width: clamp(18rem, 34vw, 30rem);
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 26px rgba(143, 184, 217, 0.2));
+}
+
+@media (max-width: 40rem) {
+  .hero-logo__mark {
+    width: 90vw;
+    max-width: 90vw;
+  }
+}

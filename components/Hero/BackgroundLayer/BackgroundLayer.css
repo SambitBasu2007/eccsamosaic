@@ -1,0 +1,37 @@
+/* Hero background — the bottom-most layer of the section. */
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  /* Letterbox bands take the page's base dark colour so the contain fit blends. */
+  background-color: var(--bg);
+}
+
+.hero-bg__image {
+  width: 100%;
+  height: 100%;
+  /* Cover: the artwork is scaled until the whole hero sits inside the picture,
+     so the section is filled edge to edge and there is no letterboxing. The
+     overflow simply runs past the section edges. */
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Keeps the title and debris legible over the brightest parts of the artwork. */
+.hero-bg__vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    /* a light scrim over the title zone, since the artwork now fills the frame */
+    radial-gradient(58% 38% at 50% 40%, rgba(3, 5, 10, 0.42) 0%, rgba(3, 5, 10, 0) 72%),
+    radial-gradient(120% 92% at 50% 42%, rgba(3, 5, 10, 0) 48%, rgba(3, 5, 10, 0.78) 100%),
+    linear-gradient(
+      to bottom,
+      rgba(3, 5, 10, 0.55) 0%,
+      rgba(3, 5, 10, 0) 28%,
+      rgba(3, 5, 10, 0) 62%,
+      rgba(3, 5, 10, 0.75) 100%
+    );
+}

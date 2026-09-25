@@ -1,0 +1,171 @@
+/* Hero title — the visually dominant element of the section. */
+
+.hero-title {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.hero-title__text {
+  /* `fit-content` keeps the box hugging the glyphs: that box is what the
+     floating debris measures and bounces off. */
+  position: relative;
+  isolation: isolate;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(3rem, 12vw, 10rem);
+  line-height: 0.88;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--text);
+  text-shadow:
+    0 0 26px rgba(143, 184, 217, 0.32),
+    0 0 80px rgba(143, 184, 217, 0.18);
+  animation: hero-title-glitch 2.4s steps(1, end) infinite;
+}
+
+.hero-title__text::before,
+.hero-title__text::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  content: "PETROVA\\A CRISIS";
+  white-space: pre;
+  pointer-events: none;
+}
+
+.hero-title__text::before {
+  color: rgba(50, 220, 255, 0.72);
+  animation: hero-title-glitch-cyan 2.4s steps(1, end) infinite;
+}
+
+.hero-title__text::after {
+  color: rgba(255, 48, 96, 0.62);
+  animation: hero-title-glitch-red 2.4s steps(1, end) infinite;
+}
+
+.hero-title__word {
+  display: block;
+}
+
+@keyframes hero-title-glitch {
+  0%,
+  8%,
+  18%,
+  38%,
+  48%,
+  68%,
+  78%,
+  100% {
+    transform: none;
+  }
+
+  9%,
+  39%,
+  69% {
+    transform: skewX(-1deg);
+  }
+
+  10%,
+  40%,
+  70% {
+    transform: translateX(0.04em);
+  }
+
+  11%,
+  41%,
+  71% {
+    transform: none;
+  }
+}
+
+@keyframes hero-title-glitch-cyan {
+  0%,
+  8%,
+  18%,
+  38%,
+  48%,
+  68%,
+  78%,
+  100% {
+    clip-path: inset(0 0 100% 0);
+    transform: translateX(0);
+  }
+
+  9%,
+  39%,
+  69% {
+    clip-path: inset(18% 0 62% 0);
+    transform: translateX(-0.045em);
+  }
+
+  10%,
+  40%,
+  70% {
+    clip-path: inset(68% 0 12% 0);
+    transform: translateX(0.035em);
+  }
+
+  11%,
+  41%,
+  71% {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+@keyframes hero-title-glitch-red {
+  0%,
+  8%,
+  18%,
+  38%,
+  48%,
+  68%,
+  78%,
+  100% {
+    clip-path: inset(0 0 100% 0);
+    transform: translateX(0);
+  }
+
+  9%,
+  39%,
+  69% {
+    clip-path: inset(58% 0 24% 0);
+    transform: translateX(0.05em);
+  }
+
+  10%,
+  40%,
+  70% {
+    clip-path: inset(8% 0 72% 0);
+    transform: translateX(-0.03em);
+  }
+
+  11%,
+  41%,
+  71% {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-title__text,
+  .hero-title__text::before,
+  .hero-title__text::after {
+    animation: none;
+  }
+}
+
+/* Slightly tighter spec on very small screens so both lines stay one word wide. */
+@media (max-width: 26rem) {
+  .hero-title__text {
+    font-size: clamp(2.55rem, 14vw, 3.4rem);
+    letter-spacing: 0.04em;
+  }
+}

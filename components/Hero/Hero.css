@@ -1,0 +1,37 @@
+/* Hero shell — also the physics container for the floating debris. */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Viewport-height hero, biased so the title sits just above true centre. */
+  min-height: 108vh;
+  min-height: 108svh;
+  padding: clamp(3.5rem, 9vh, 6.5rem) var(--gutter) clamp(6rem, 16vh, 10rem);
+  overflow: hidden;
+  background-color: var(--bg);
+}
+
+/* Stacking order inside the hero:
+   0  background image
+   1  floating debris
+   2  title + logo marks                                                */
+.hero__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.75rem, 5vh, 3.25rem);
+  width: 100%;
+  max-width: var(--content-max);
+  text-align: center;
+  pointer-events: none;
+  transform: translateY(clamp(2rem, 5vh, 4rem));
+}
+
+.hero__content > * {
+  pointer-events: auto;
+}

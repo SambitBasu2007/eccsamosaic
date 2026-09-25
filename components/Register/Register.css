@@ -1,0 +1,44 @@
+/* Register — restated facts, then the primary action. */
+
+.register__inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 5vh, 3rem);
+}
+
+.register__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  column-gap: clamp(1.5rem, 4vw, 3rem);
+  padding-inline: clamp(0.9rem, 3vw, 1.75rem);
+  background: rgba(5, 6, 10, 0.42);
+  border-top: 1px solid var(--hairline);
+  backdrop-filter: blur(3px);
+}
+
+.register__fact {
+  padding-block: clamp(1rem, 2.6vh, 1.4rem);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.register__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+}
+
+.register__status {
+  color: var(--text-muted);
+}
+
+@media (max-width: 40rem) {
+  .register__facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .register__cta {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

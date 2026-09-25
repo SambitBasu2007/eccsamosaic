@@ -1,0 +1,40 @@
+/* Hero register control. */
+
+.hero-register {
+  position: absolute;
+  top: clamp(0.7rem, 1.8vh, 1.35rem);
+  left: 50%;
+  z-index: 3;
+  min-height: 4.5rem;
+  padding: 1em 1.8em;
+  gap: 0.45em;
+  font-size: clamp(1.15rem, 2.8vw, 1.5rem);
+  white-space: nowrap;
+  width: max-content;
+  max-width: calc(100vw - 2rem);
+  color: var(--signal);
+  transform: translateX(-50%);
+}
+
+.hero-register__bracket {
+  color: var(--text-muted);
+  transition: color 180ms ease;
+}
+
+.hero-register:hover .hero-register__bracket,
+.hero-register:focus-visible .hero-register__bracket {
+  color: var(--signal);
+}
+
+/*
+ * Small screens: pin it, so the primary action stays reachable the whole way
+ * down the page without hunting for the hero again.
+ */
+@media (max-width: 48rem) {
+  .hero-register {
+    position: fixed;
+    top: max(0.45rem, env(safe-area-inset-top));
+    left: 50%;
+    z-index: 40;
+  }
+}

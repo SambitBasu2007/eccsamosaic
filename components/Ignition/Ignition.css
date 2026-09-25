@@ -1,0 +1,549 @@
+/* ---------------------------------------------------------------------------
+   Ignition Sequence (section 02) — the pinned scroll transition.
+
+   One scroll-progress value (0–1) drives every layer through four phases:
+
+     0.00 – 0.30  entrance   planet descends from above, astronaut rises from
+                             below, both settling into one composed frame
+     0.30 – 0.60  hold       ambient drift + rotation, red glow begins to build
+    0.60 – 1.00  ignition   particle bloom scales up, frame commits to crimson
+
+   The value is a registered custom property animated by a single scroll-driven
+   animation on `.ignition__track` (see the bottom of this file). Because it is
+   tied to the element's own viewport timeline, the scene is perfectly
+   scrubbable in both directions and needs no JavaScript at all.
+
+   Fallback: the final composed frame is declared as plain custom-property
+   values on `.ignition`, so browsers without `animation-timeline` — and
+   visitors with prefers-reduced-motion — simply render the arrived scene with
+   a light red tint and no motion.
+   --------------------------------------------------------------------------- */
+
+/* --- Phase signals -------------------------------------------------------- */
+/* Registered so they interpolate smoothly and inherit into every layer. */
+@property --ign-p {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --ign-enter {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --ign-pl {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --ign-glow {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --ign-burn {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --ign-fade {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --ign-bob {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.ignition {
+  /* Full-bleed: the stage is a viewport, not a content column. */
+  padding-inline: 0;
+  padding-bottom: 0;
+  background-color: #26070d;
+
+  /* Final composed frame — also the fallback where the scroll scene cannot
+     run (no `animation-timeline`, or reduced motion). The animated track
+     overrides these for its own subtree through the animation origin. */
+  --ign-p: 0.55;
+  --ign-enter: 1;
+  --ign-pl: 1;
+  --ign-glow: 0.85;
+  --ign-burn: 0.5;
+  --ign-fade: 0;
+  --ign-bob: 0;
+}
+
+.ignition__track {
+  position: relative;
+}
+
+.ignition__stage {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  opacity: calc(1 - var(--ign-fade));
+  transform: translateY(calc(var(--ign-fade) * -5vh));
+}
+
+/* --- Layer 1: red ambient glow (behind the planet) ------------------------ */
+/* Ramps in during the hold phase — the setup for ignition, not the full
+   effect yet; the burn completes it. */
+.ignition__glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(
+      58% 44% at 50% 40%,
+      rgba(200, 32, 60, 0.55),
+      rgba(200, 32, 60, 0.16) 46%,
+      rgba(200, 32, 60, 0) 72%
+    ),
+    radial-gradient(34% 26% at 50% 48%, rgba(217, 123, 63, 0.4), rgba(217, 123, 63, 0) 72%);
+  opacity: calc(var(--ign-glow) * 0.45 + var(--ign-burn) * 0.55);
+  mix-blend-mode: screen;
+  filter: brightness(1.7) saturate(1.45);
+  pointer-events: none;
+}
+
+/* --- Layer 2: the planet (descends from above) ---------------------------- */
+.ignition__planet {
+  position: absolute;
+  z-index: 1;
+  top: -35vh;
+  left: 50%;
+  /* Size by width and let the intrinsic 1472x900 ratio determine height. The
+    image is oversized enough to contain the viewport without being stretched. */
+  width: max(112vw, 150vh);
+  height: auto;
+  max-width: none;
+  /* Parallax: `--ign-pl` lags the astronaut's `--ign-enter`, so the planet
+     arrives visibly slower — distance between the two layers. */
+  transform:
+    translate(-50%, calc((1 - var(--ign-pl)) * -120vh + var(--ign-glow) * 2vh))
+    rotate(calc((var(--ign-p) - 0.5) * 5deg)) scale(calc(1.06 - 0.06 * var(--ign-pl)));
+  will-change: transform;
+}
+
+/* --- Layer 3: the astronaut (rises from below) ---------------------------- */
+.ignition__astronaut {
+  position: absolute;
+  z-index: 2;
+  top: 46vh;
+  left: 50%;
+  /* The canvas runs below the viewport so its bottom edge is never visible;
+     the ship and figure remain large enough to read against the planet. */
+  width: auto;
+  height: max(62vh, 48vw);
+  max-width: none;
+  transform:
+    /* -63.4% puts the figure — which sits low-right inside its transparent
+       frame — on the centre line; enter from below; glow drifts it up while
+       the planet settles down (opposing motion = depth); bob = the hold
+       phase's float. */
+    translate(
+      calc(-50% - 13.4%),
+      calc((1 - var(--ign-enter)) * 116vh + var(--ign-glow) * -2.5vh + var(--ign-bob) * 1.3vh)
+    )
+    scale(calc(0.92 + 0.08 * var(--ign-enter)));
+  will-change: transform;
+}
+
+@media (min-width: 48.01rem) {
+  .ignition__astronaut {
+    top: 30vh;
+    height: max(54vh, 44vw);
+  }
+}
+
+@media (max-width: 48rem) {
+  .ignition__astronaut {
+    height: max(58vh, 44vw);
+    transform:
+      translate(
+        calc(-50% + 8%),
+        calc((1 - var(--ign-enter)) * 116vh + var(--ign-glow) * -2.5vh + var(--ign-bob) * 1.3vh)
+      )
+      scale(calc(0.92 + 0.08 * var(--ign-enter)));
+  }
+}
+
+/* Both PNGs tint toward crimson together with the particles, so the frame
+   commits as one scene rather than the bloom sitting on top of it. */
+.ignition__planet,
+.ignition__astronaut {
+  filter:
+    sepia(calc(var(--ign-burn) * 0.8))
+    hue-rotate(calc(var(--ign-burn) * -20deg))
+    saturate(calc(1 + var(--ign-burn) * 1.7))
+    brightness(calc(1 + var(--ign-burn) * 0.12));
+}
+
+/* --- Layer 4: crimson commit veil ----------------------------------------- */
+.ignition__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: linear-gradient(
+    180deg,
+    rgba(60, 8, 14, 0.5) 0%,
+    rgba(140, 14, 32, 0.62) 55%,
+    rgba(60, 8, 14, 0.75) 100%
+  );
+  opacity: calc(var(--ign-burn) * 0.55);
+  filter: brightness(1.25) saturate(1.4);
+  pointer-events: none;
+}
+
+/* --- Layer 5: soft translucent bloom circles ------------------------------ */
+.ignition__bloom {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background:
+    radial-gradient(circle 16vh at 30% 36%, rgba(232, 74, 96, 0.55), rgba(232, 74, 96, 0) 70%),
+    radial-gradient(circle 24vh at 68% 58%, rgba(200, 32, 60, 0.5), rgba(200, 32, 60, 0) 72%),
+    radial-gradient(circle 12vh at 46% 72%, rgba(217, 123, 63, 0.5), rgba(217, 123, 63, 0) 70%),
+    radial-gradient(circle 20vh at 60% 26%, rgba(224, 38, 74, 0.45), rgba(224, 38, 74, 0) 74%),
+    radial-gradient(circle 14vh at 38% 56%, rgba(255, 143, 120, 0.4), rgba(255, 143, 120, 0) 70%);
+  opacity: calc((var(--ign-burn) - 0.12) * 1.25);
+  mix-blend-mode: screen;
+  filter: brightness(1.9) saturate(1.6);
+  transform: scale(calc(0.82 + var(--ign-burn) * 0.38));
+  pointer-events: none;
+}
+
+/* --- Layer 6: particle sparks (additive, density ramps with burn) --------- */
+.ignition__sparks {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  filter: brightness(2.2) saturate(1.7);
+  pointer-events: none;
+}
+
+.ignition__particle {
+  position: absolute;
+  top: calc(50% + var(--particle-y));
+  left: calc(50% + var(--particle-x));
+  width: var(--particle-size);
+  height: var(--particle-size);
+  border-radius: 50%;
+  background: #ffd6cc;
+  box-shadow:
+    0 0 0.35rem rgba(255, 130, 110, 0.95),
+    0 0 1rem rgba(232, 74, 96, 0.72),
+    0 0 2.2rem rgba(200, 32, 60, 0.46);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  animation: ignition-particle-blink var(--particle-duration) steps(4, end)
+    var(--particle-delay) infinite;
+}
+
+.ignition__particle:nth-child(3n) {
+  background: #ff7a68;
+  box-shadow:
+    0 0 0.45rem rgba(255, 122, 104, 0.95),
+    0 0 1.25rem rgba(232, 74, 96, 0.85),
+    0 0 2.8rem rgba(200, 32, 60, 0.55);
+}
+
+.ignition__particle:nth-child(3n + 2) {
+  background: #ffb46e;
+  box-shadow:
+    0 0 0.4rem rgba(255, 180, 110, 0.95),
+    0 0 1.15rem rgba(217, 123, 63, 0.82),
+    0 0 2.5rem rgba(200, 32, 60, 0.5);
+}
+
+.ignition__circles {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  opacity: calc((var(--ign-burn) - 0.08) * 1.35);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.ignition__circle {
+  position: absolute;
+  top: calc(50% + var(--circle-y));
+  left: calc(50% + var(--circle-x));
+  width: var(--circle-size);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 116, 111, 0.45);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 87, 91, 0.42) 0%,
+    rgba(200, 32, 60, 0.2) 48%,
+    rgba(200, 32, 60, 0) 74%
+  );
+  box-shadow:
+    0 0 1rem rgba(232, 74, 96, 0.25),
+    inset 0 0 0.8rem rgba(255, 143, 120, 0.16);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.86);
+  animation: ignition-circle-blink var(--circle-duration) ease-in-out
+    var(--circle-delay) infinite;
+}
+
+/* Soft glow motes: present from the first spark. */
+.ignition__sparks--few {
+  box-shadow:
+    -34vw -24vh 10px 3px rgba(255, 158, 132, 0.75),
+    -22vw -6vh 8px 2px rgba(232, 74, 96, 0.8),
+    -38vw 14vh 9px 3px rgba(217, 123, 63, 0.7),
+    -14vw 26vh 7px 2px rgba(255, 190, 150, 0.7),
+    2vw -30vh 9px 3px rgba(232, 74, 96, 0.75),
+    16vw -14vh 8px 2px rgba(255, 158, 132, 0.8),
+    30vw 4vh 10px 3px rgba(200, 32, 60, 0.85),
+    38vw 22vh 8px 2px rgba(217, 123, 63, 0.7),
+    10vw 30vh 7px 2px rgba(232, 74, 96, 0.8),
+    -6vw 12vh 9px 3px rgba(255, 190, 150, 0.6),
+    24vw -28vh 7px 2px rgba(255, 158, 132, 0.7),
+    -30vw 30vh 8px 2px rgba(200, 32, 60, 0.8);
+  opacity: calc(var(--ign-burn) * 1.15);
+  transform: translate(-50%, calc(-50% + (1 - var(--ign-burn)) * 14vh - var(--ign-burn) * 6vh))
+    scale(calc(0.5 + var(--ign-burn) * 0.8));
+}
+
+/* Crisp sparkles: fade in later, so density climbs with scroll progress. */
+.ignition__sparks--many {
+  box-shadow:
+    -40vw -18vh 3px 1px rgba(255, 214, 204, 0.9),
+    -32vh -8vh 2px 1px rgba(255, 130, 110, 0.9),
+    -26vw -32vh 3px 1px rgba(232, 74, 96, 0.9),
+    -18vw 4vh 2px 1px rgba(255, 214, 204, 0.85),
+    -12vw -22vh 3px 1px rgba(217, 123, 63, 0.9),
+    -4vw 34vh 2px 1px rgba(255, 130, 110, 0.85),
+    4vw -12vh 3px 1px rgba(255, 214, 204, 0.9),
+    12vw 24vh 2px 1px rgba(232, 74, 96, 0.9),
+    20vw -34vh 3px 1px rgba(217, 123, 63, 0.85),
+    28vw 10vh 2px 1px rgba(255, 214, 204, 0.9),
+    36vw -20vh 3px 1px rgba(255, 130, 110, 0.9),
+    42vw 28vh 2px 1px rgba(232, 74, 96, 0.85),
+    -20vw 38vh 2px 1px rgba(255, 214, 204, 0.8),
+    8vw 40vh 3px 1px rgba(217, 123, 63, 0.85),
+    -44vw 6vh 2px 1px rgba(255, 130, 110, 0.85),
+    34vw -6vh 2px 1px rgba(255, 214, 204, 0.85),
+    -28vw -40vh 3px 1px rgba(232, 74, 96, 0.85),
+    18vw 16vh 2px 1px rgba(255, 130, 110, 0.9),
+    -8vw -36vh 2px 1px rgba(255, 214, 204, 0.85),
+    44vw -30vh 3px 1px rgba(217, 123, 63, 0.8),
+    -36vw 34vh 2px 1px rgba(232, 74, 96, 0.85),
+    0vw -40vh 2px 1px rgba(255, 214, 204, 0.8),
+    -46vw -26vh 2px 1px rgba(255, 130, 110, 0.82),
+    -38vw -2vh 3px 1px rgba(255, 214, 204, 0.78),
+    -24vw 18vh 2px 1px rgba(232, 74, 96, 0.88),
+    -10vw 44vh 3px 1px rgba(255, 130, 110, 0.8),
+    2vw 42vh 2px 1px rgba(255, 214, 204, 0.82),
+    16vw 38vh 3px 1px rgba(232, 74, 96, 0.88),
+    30vw 34vh 2px 1px rgba(255, 130, 110, 0.82),
+    46vw 12vh 3px 1px rgba(255, 214, 204, 0.8),
+    48vw -18vh 2px 1px rgba(232, 74, 96, 0.86),
+    26vw -42vh 3px 1px rgba(255, 130, 110, 0.84),
+    -16vw -42vh 2px 1px rgba(255, 214, 204, 0.8);
+  opacity: calc((var(--ign-burn) - 0.2) * 2.1);
+  transform: translate(-50%, calc(-50% + (1 - var(--ign-burn)) * 20vh - var(--ign-burn) * 4vh))
+    scale(calc(0.45 + var(--ign-burn) * 0.9));
+}
+
+/* The visible field is made from individual nodes so each spark can blink on
+   its own instead of every particle sharing one box-shadow timing. */
+.ignition__sparks--few,
+.ignition__sparks--many {
+  box-shadow: none;
+}
+
+/* --- HUD marker ----------------------------------------------------------- */
+.ignition__marker {
+  position: absolute;
+  z-index: 6;
+  top: clamp(1.25rem, 4vh, 2.5rem);
+  left: var(--gutter);
+  width: min(20rem, calc(100vw - 2 * var(--gutter)));
+  color: var(--accent);
+  text-shadow: 0 0 18px rgba(5, 6, 10, 0.95);
+  opacity: calc(var(--ign-enter) * (1 - var(--ign-fade)));
+}
+
+/* --- The scroll scene ----------------------------------------------------- */
+/* Progressive enhancement: nothing above depends on this block, and the
+   composed-frame values on `.ignition` cover both this block's absence and
+   the reduced-motion case (the media query below simply never applies it). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ignition__track {
+      /* 1.4x scroll room: the stage pins while the final 40% holds the
+        completed crimson frame. */
+      height: 420vh;
+
+      animation-name: ignition-drive;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      /* cover 25% → 75% is the exact pin window for a track three viewports
+         tall: from the track top reaching the viewport top until its bottom
+         reaches the viewport bottom. */
+      animation-range: cover 25% cover 75%;
+    }
+
+    .ignition__stage {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      min-height: 0;
+    }
+  }
+}
+
+/*
+ * The single driver: one timeline, one value per phase signal. Keyframe stops
+   * sit exactly on the phase boundaries (0.30 / 0.42 / 0.60 / 0.70 / 1.00), and
+ * each segment carries its own timing function — the entrance gets a fast
+ * start with a gentle settle, the burn eases in, the handoff fades.
+ */
+@keyframes ignition-drive {
+  0% {
+    --ign-p: 0;
+    --ign-enter: 0;
+    --ign-pl: 0;
+    --ign-glow: 0;
+    --ign-burn: 0;
+    --ign-fade: 0;
+    --ign-bob: 0;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  30% {
+    --ign-p: 0.3;
+    --ign-enter: 1;
+    --ign-pl: 0.86;
+    --ign-glow: 0;
+    --ign-burn: 0;
+    --ign-fade: 0;
+    --ign-bob: 0.5;
+    animation-timing-function: cubic-bezier(0.4, 0.05, 0.5, 1);
+  }
+  42% {
+    --ign-p: 0.42;
+    --ign-enter: 1;
+    --ign-pl: 1;
+    --ign-glow: 0.35;
+    --ign-burn: 0;
+    --ign-fade: 0;
+    --ign-bob: -0.5;
+    animation-timing-function: linear;
+  }
+  60% {
+    --ign-p: 0.6;
+    --ign-enter: 1;
+    --ign-pl: 1;
+    --ign-glow: 1;
+    --ign-burn: 0.3;
+    --ign-fade: 0;
+    --ign-bob: 0.5;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.8, 0.5);
+  }
+  70% {
+    --ign-p: 0.7;
+    --ign-enter: 1;
+    --ign-pl: 1;
+    --ign-glow: 1;
+    --ign-burn: 1;
+    --ign-fade: 0;
+    --ign-bob: -0.35;
+    animation-timing-function: ease-out;
+  }
+  100% {
+    --ign-p: 1;
+    --ign-enter: 1;
+    --ign-pl: 1;
+    --ign-glow: 1;
+    --ign-burn: 1;
+    --ign-fade: 0;
+    --ign-bob: 0;
+  }
+}
+
+@keyframes ignition-particle-blink {
+  0%,
+  16%,
+  100% {
+    opacity: 0.08;
+    filter: brightness(0.7);
+  }
+
+  24% {
+    opacity: 0.88;
+    filter: brightness(1.4);
+  }
+
+  31% {
+    opacity: 0.18;
+    filter: brightness(0.8);
+  }
+
+  56% {
+    opacity: 1;
+    filter: brightness(1.8);
+  }
+
+  64% {
+    opacity: 0.12;
+    filter: brightness(0.65);
+  }
+
+  82% {
+    opacity: 0.7;
+    filter: brightness(1.25);
+  }
+}
+
+@keyframes ignition-circle-blink {
+  0%,
+  100% {
+    opacity: 0.04;
+    transform: translate(-50%, -50%) scale(0.86);
+  }
+
+  28% {
+    opacity: 0.28;
+    transform: translate(-50%, -50%) scale(0.98);
+  }
+
+  42% {
+    opacity: 0.1;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  68% {
+    opacity: 0.42;
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+
+  82% {
+    opacity: 0.08;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ignition__particle {
+    animation: none;
+    opacity: 0.75;
+  }
+
+  .ignition__circle {
+    animation: none;
+    opacity: 0.22;
+  }
+}

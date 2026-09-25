@@ -1,0 +1,40 @@
+/* Floating debris layer — above the background, below the title. */
+
+.debris {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.debris__rock {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Only the transform is animated, so the compositor can keep this off the
+     main thread. No width/height/top/left ever change mid-flight. */
+  will-change: transform;
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .debris__rock {
+    /* Rocks are frozen in place; the compositor hint would just cost memory. */
+    will-change: auto;
+  }
+}
+
+/*
+ * Motion budget on small screens. This is about mobile GPU budget rather than
+ * layout, so it thins the count out instead of shrinking everything: the engine
+ * skips any rock that is not rendering (it checks `offsetParent`).
+ */
+@media (max-width: 40rem) {
+  .debris__rock:nth-child(n + 3) {
+    display: none;
+  }
+}

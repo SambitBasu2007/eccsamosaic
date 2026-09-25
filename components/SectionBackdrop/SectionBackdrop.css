@@ -1,0 +1,25 @@
+/* Scenic section background — always the layer behind a section's content. */
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background-color: var(--bg);
+}
+
+.backdrop__image {
+  width: 100%;
+  height: 100%;
+  /* Fills the section edge to edge, matching the hero. */
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Legibility layer between photograph and text. Tinted crimson on crisis
+   sections via the section-scoped `--overlay` token. */
+.backdrop__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay);
+}

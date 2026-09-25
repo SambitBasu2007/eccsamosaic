@@ -1,0 +1,60 @@
+/* Our Theme — mission log readout. */
+
+.our-theme__inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 5vh, 3rem);
+}
+
+.our-theme__log {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--hairline);
+}
+
+.our-theme__entry {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 0.4rem 1.75rem;
+  padding-block: clamp(1rem, 2.4vh, 1.35rem);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.our-theme__stamp {
+  padding-top: 0.35rem;
+  color: var(--accent);
+}
+
+.our-theme__line {
+  font-size: clamp(1.1rem, 2.3vw, 1.38rem);
+  line-height: 1.6;
+  color: var(--text);
+  max-width: 64ch;
+}
+
+.our-theme__outro {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.our-theme__handoff {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.8vw, 1.75rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-shadow: 0 0 30px var(--accent-glow);
+}
+
+/* Stacked on narrow screens: stamp above its line. */
+@media (max-width: 40rem) {
+  .our-theme__entry {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.3rem;
+  }
+
+  .our-theme__stamp {
+    padding-top: 0;
+  }
+}

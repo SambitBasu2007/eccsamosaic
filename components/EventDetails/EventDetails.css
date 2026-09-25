@@ -1,0 +1,23 @@
+/* Mission Dossier — terminal readout grid. */
+
+.dossier__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  column-gap: clamp(1.5rem, 4vw, 3.25rem);
+  padding-inline: clamp(0.9rem, 3vw, 1.75rem);
+  /* A translucent panel, so the values stay legible over the photograph. */
+  background: rgba(5, 6, 10, 0.42);
+  border-top: 1px solid var(--hairline);
+  backdrop-filter: blur(3px);
+}
+
+.dossier__row {
+  padding-block: clamp(1rem, 2.6vh, 1.5rem);
+  border-bottom: 1px solid var(--hairline);
+}
+
+@media (max-width: 40rem) {
+  .dossier__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
