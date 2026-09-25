@@ -55,7 +55,7 @@ export const EVENT = {
 
   /* --- Mission Dossier -------------------------------------------------- */
   dossier: {
-    date: "",
+    date: "16-17 October 2026",
     venue: "St. Francis Institute of Technology, room no. 618",
     location: "St. Francis Institute of Technology, 6th floor, room 618",
     prizePool: "₹idk Cash Prize",
