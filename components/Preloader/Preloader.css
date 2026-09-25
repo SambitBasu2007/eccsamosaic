@@ -14,6 +14,10 @@
   transition: visibility var(--intro-fade) ease;
 }
 
+.preloader--loading {
+  background: #000;
+}
+
 .preloader--leaving {
   visibility: hidden;
   pointer-events: none;
@@ -39,8 +43,37 @@ html[data-preloader="skip"] .preloader {
   transition: opacity var(--intro-fade) ease;
 }
 
+.preloader--loading .preloader__video {
+  visibility: hidden;
+}
+
+.preloader__loading {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  background: #000;
+}
+
+.preloader__loading img {
+  width: clamp(4rem, 14vw, 8rem);
+  height: auto;
+  animation: preloader-rock-spin 1.8s linear infinite;
+}
+
+@keyframes preloader-rock-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .preloader--leaving .preloader__video,
 .preloader--leaving .preloader__skip {
+  opacity: 0;
+}
+
+.preloader--leaving .preloader__loading {
   opacity: 0;
 }
 
@@ -99,4 +132,10 @@ html[data-preloader="skip"] .preloader {
   font-size: 0.85em;
   letter-spacing: 0.08em;
   opacity: 0.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader__loading img {
+    animation: none;
+  }
 }

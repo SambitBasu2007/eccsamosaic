@@ -1,23 +1,29 @@
-import About from "@/components/landingpage/About";
-import Committee from "@/components/landingpage/Committee";
-import Domains from "@/components/landingpage/Domains";
-import Events from "@/components/landingpage/Events";
-import Footer from "@/components/landingpage/Footer";
-import Gallery from "@/components/landingpage/Gallery";
-import Header from "@/components/landingpage/Header";
-import Hero from "@/components/landingpage/Hero";
+import About from "@/components/About/About";
+import EventDetails from "@/components/EventDetails/EventDetails";
+import Footer from "@/components/Footer/Footer";
+import Hero from "@/components/Hero/Hero";
+import Ignition from "@/components/Ignition/Ignition";
+import OurTheme from "@/components/OurTheme/OurTheme";
+import Register from "@/components/Register/Register";
 
-export default function Home() {
+/**
+ * The single page.
+ *
+ * Every section is a self-contained component with a sibling CSS file; this file
+ * just stacks them in story order. The pre/post-crisis palette handoff happens
+ * at the Ignition Sequence, where `.section--crisis` first appears — everything
+ * after it stays in the crimson palette.
+ */
+export default function HomePage() {
   return (
     <>
-      <Header />
-      <main>
+      <main id="content">
         <Hero />
         <About />
-        <Domains />
-        <Events />
-        <Gallery />
-        <Committee />
+        <Ignition />
+        <OurTheme />
+        <EventDetails />
+        <Register />
       </main>
       <Footer />
     </>

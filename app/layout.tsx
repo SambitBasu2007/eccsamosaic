@@ -1,54 +1,38 @@
 import type { Metadata, Viewport } from "next";
-import { GeistSans } from "geist/font/sans";
 
+import Preloader from "@/components/Preloader/Preloader";
+import PreloaderGate from "@/components/Preloader/PreloaderGate";
+
+import "@/styles/fonts.css";
 import "./globals.css";
-
-const title = "ECSSA — Electronics & Computer Science Student Association";
-const description =
-  "Official student association bridging electronics and computer science through innovation, collaboration, and inspiration.";
+import "@/styles/sections.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  title,
-  description,
+  title: "Petrova Crisis — MOSAIC 2026",
+  description:
+    "ECSSA presents MOSAIC 2026: an interstellar technical event. Briefing inbound.",
   icons: {
     icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
-  },
-  openGraph: {
-    type: "website",
-    title,
-    description,
-    siteName: "ECSSA",
-    images: [
-      {
-        url: "/landingpage/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "ECSSA — Electronics and Computer Science Student Association",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-    images: ["/landingpage/og-image.png"],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
-  colorScheme: "light",
+  themeColor: "#03050a",
+  colorScheme: "dark",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`no-js ${GeistSans.variable}`} suppressHydrationWarning>
-      <body className={GeistSans.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        {/* Runs during parsing, before the first paint: hides the intro overlay
+            for returning visitors and reduced-motion users without a flash. */}
+        <PreloaderGate />
+        {/* Full-screen intro film. Server-rendered so it covers the hero from
+            the first frame while the hero loads normally underneath. */}
+        <Preloader />
+        {children}
+      </body>
     </html>
   );
 }

@@ -87,6 +87,21 @@
   transform: translateY(calc(var(--ign-fade) * -5vh));
 }
 
+/* Keep the transparent image canvas from ever reading as a hard rectangle at
+   the bottom of the pinned stage, including when the scroll timeline is not
+   available in a deployed browser. */
+.ignition__stage::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  height: clamp(2.5rem, 9vh, 6rem);
+  content: "";
+  background: linear-gradient(180deg, rgba(38, 7, 13, 0), #26070d 55%);
+  pointer-events: none;
+}
+
 /* --- Layer 1: red ambient glow (behind the planet) ------------------------ */
 /* Ramps in during the hold phase — the setup for ignition, not the full
    effect yet; the burn completes it. */
@@ -160,7 +175,7 @@
 
 @media (max-width: 48rem) {
   .ignition__astronaut {
-    height: max(58vh, 44vw);
+    height: max(68vh, 50vw);
     transform:
       translate(
         calc(-50% + 8%),
@@ -295,72 +310,12 @@
     var(--circle-delay) infinite;
 }
 
-/* Soft glow motes: present from the first spark. */
-.ignition__sparks--few {
-  box-shadow:
-    -34vw -24vh 10px 3px rgba(255, 158, 132, 0.75),
-    -22vw -6vh 8px 2px rgba(232, 74, 96, 0.8),
-    -38vw 14vh 9px 3px rgba(217, 123, 63, 0.7),
-    -14vw 26vh 7px 2px rgba(255, 190, 150, 0.7),
-    2vw -30vh 9px 3px rgba(232, 74, 96, 0.75),
-    16vw -14vh 8px 2px rgba(255, 158, 132, 0.8),
-    30vw 4vh 10px 3px rgba(200, 32, 60, 0.85),
-    38vw 22vh 8px 2px rgba(217, 123, 63, 0.7),
-    10vw 30vh 7px 2px rgba(232, 74, 96, 0.8),
-    -6vw 12vh 9px 3px rgba(255, 190, 150, 0.6),
-    24vw -28vh 7px 2px rgba(255, 158, 132, 0.7),
-    -30vw 30vh 8px 2px rgba(200, 32, 60, 0.8);
-  opacity: calc(var(--ign-burn) * 1.15);
-  transform: translate(-50%, calc(-50% + (1 - var(--ign-burn)) * 14vh - var(--ign-burn) * 6vh))
-    scale(calc(0.5 + var(--ign-burn) * 0.8));
-}
-
-/* Crisp sparkles: fade in later, so density climbs with scroll progress. */
+/* The visible field is made from individual nodes so each spark can blink on
+   its own instead of every particle sharing one box-shadow timing. */
 .ignition__sparks--many {
-  box-shadow:
-    -40vw -18vh 3px 1px rgba(255, 214, 204, 0.9),
-    -32vh -8vh 2px 1px rgba(255, 130, 110, 0.9),
-    -26vw -32vh 3px 1px rgba(232, 74, 96, 0.9),
-    -18vw 4vh 2px 1px rgba(255, 214, 204, 0.85),
-    -12vw -22vh 3px 1px rgba(217, 123, 63, 0.9),
-    -4vw 34vh 2px 1px rgba(255, 130, 110, 0.85),
-    4vw -12vh 3px 1px rgba(255, 214, 204, 0.9),
-    12vw 24vh 2px 1px rgba(232, 74, 96, 0.9),
-    20vw -34vh 3px 1px rgba(217, 123, 63, 0.85),
-    28vw 10vh 2px 1px rgba(255, 214, 204, 0.9),
-    36vw -20vh 3px 1px rgba(255, 130, 110, 0.9),
-    42vw 28vh 2px 1px rgba(232, 74, 96, 0.85),
-    -20vw 38vh 2px 1px rgba(255, 214, 204, 0.8),
-    8vw 40vh 3px 1px rgba(217, 123, 63, 0.85),
-    -44vw 6vh 2px 1px rgba(255, 130, 110, 0.85),
-    34vw -6vh 2px 1px rgba(255, 214, 204, 0.85),
-    -28vw -40vh 3px 1px rgba(232, 74, 96, 0.85),
-    18vw 16vh 2px 1px rgba(255, 130, 110, 0.9),
-    -8vw -36vh 2px 1px rgba(255, 214, 204, 0.85),
-    44vw -30vh 3px 1px rgba(217, 123, 63, 0.8),
-    -36vw 34vh 2px 1px rgba(232, 74, 96, 0.85),
-    0vw -40vh 2px 1px rgba(255, 214, 204, 0.8),
-    -46vw -26vh 2px 1px rgba(255, 130, 110, 0.82),
-    -38vw -2vh 3px 1px rgba(255, 214, 204, 0.78),
-    -24vw 18vh 2px 1px rgba(232, 74, 96, 0.88),
-    -10vw 44vh 3px 1px rgba(255, 130, 110, 0.8),
-    2vw 42vh 2px 1px rgba(255, 214, 204, 0.82),
-    16vw 38vh 3px 1px rgba(232, 74, 96, 0.88),
-    30vw 34vh 2px 1px rgba(255, 130, 110, 0.82),
-    46vw 12vh 3px 1px rgba(255, 214, 204, 0.8),
-    48vw -18vh 2px 1px rgba(232, 74, 96, 0.86),
-    26vw -42vh 3px 1px rgba(255, 130, 110, 0.84),
-    -16vw -42vh 2px 1px rgba(255, 214, 204, 0.8);
   opacity: calc((var(--ign-burn) - 0.2) * 2.1);
   transform: translate(-50%, calc(-50% + (1 - var(--ign-burn)) * 20vh - var(--ign-burn) * 4vh))
     scale(calc(0.45 + var(--ign-burn) * 0.9));
-}
-
-/* The visible field is made from individual nodes so each spark can blink on
-   its own instead of every particle sharing one box-shadow timing. */
-.ignition__sparks--few,
-.ignition__sparks--many {
-  box-shadow: none;
 }
 
 /* --- HUD marker ----------------------------------------------------------- */

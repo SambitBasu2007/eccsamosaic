@@ -111,23 +111,6 @@ export default function Ignition() {
           {/* Crimson commit veil, then the particle bloom on top of it. */}
           <div className="ignition__veil" aria-hidden="true" />
           <div className="ignition__bloom" aria-hidden="true" />
-          <div className="ignition__sparks ignition__sparks--few" aria-hidden="true">
-            {PARTICLES.slice(0, 12).map(([x, y, size, duration, delay], index) => (
-              <span
-                className="ignition__particle"
-                key={`soft-${index}`}
-                style={
-                  {
-                    "--particle-x": `${x}vw`,
-                    "--particle-y": `${y}vh`,
-                    "--particle-size": `${size}px`,
-                    "--particle-duration": `${duration}s`,
-                    "--particle-delay": `${delay}s`,
-                  } as CSSProperties
-                }
-              />
-            ))}
-          </div>
           <div className="ignition__sparks ignition__sparks--many" aria-hidden="true">
             {PARTICLES.map(([x, y, size, duration, delay], index) => (
               <span

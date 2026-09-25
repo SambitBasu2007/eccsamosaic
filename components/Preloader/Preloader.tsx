@@ -31,6 +31,7 @@ export default function Preloader() {
 
   const [mounted, setMounted] = useState(true);
   const [playVideo, setPlayVideo] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const [filmEnded, setFilmEnded] = useState(false);
 
@@ -113,7 +114,9 @@ export default function Preloader() {
 
   return (
     <div
-      className={`preloader${leaving ? " preloader--leaving" : ""}`}
+      className={`preloader${playVideo && !videoReady ? " preloader--loading" : ""}${
+        leaving ? " preloader--leaving" : ""
+      }`}
       role="presentation"
       onPointerDown={() => finish()}
     >
@@ -133,17 +136,26 @@ export default function Preloader() {
           disablePictureInPicture
           tabIndex={-1}
           aria-hidden="true"
+          onCanPlayThrough={() => setVideoReady(true)}
           onEnded={() => setFilmEnded(true)}
           onError={() => finish({ immediate: true })}
         />
       )}
 
-      <button type="button" className="preloader__skip" onClick={() => finish()}>
-        Skip intro
-        <span className="preloader__skip-hint" aria-hidden="true">
-          esc
-        </span>
-      </button>
+      {playVideo && !videoReady && (
+        <div className="preloader__loading" aria-label="Loading intro" role="status">
+          <img src={ASSETS.debris.rock} alt="" aria-hidden="true" />
+        </div>
+      )}
+
+      {videoReady && (
+        <button type="button" className="preloader__skip" onClick={() => finish()}>
+          Skip intro
+          <span className="preloader__skip-hint" aria-hidden="true">
+            esc
+          </span>
+        </button>
+      )}
     </div>
   );
 }
