@@ -1,0 +1,288 @@
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: calc(var(--header-h) + 48px) 0 112px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.hero__inner {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: var(--container);
+  padding-inline: var(--gutter);
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+/* Two equally sized sections side by side: the logo on the left, the MOSAIC
+   promo (artwork above the register button) on the right. 864px = 2 × 400px
+   sections + the 64px gap that separates them. */
+.hero__top {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 64px;
+  width: 100%;
+  max-width: 864px;
+}
+
+.hero__logo-wrap {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  max-width: 400px;
+}
+
+.hero__logo {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+
+  /* Lock the PNG and the animated WebM to the same rendered box, so toggling
+     between them never resizes the layout. The video letterboxes into this
+     frame (object-fit) if its intrinsic pixels differ. */
+  aspect-ratio: 482 / 476;
+  object-fit: contain;
+}
+
+/* Invisible hit-target inset 8 px on every side so it's slightly smaller
+   than the logo image. No background / border so it's completely invisible. */
+.hero__logo-btn {
+  position: absolute;
+  inset: 8px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: transform 0.15s ease;
+}
+
+.hero__logo-btn:active {
+  transform: scale(0.97);
+}
+
+/* Video (animated logo state) is also clickable — pointer cursor signals it */
+.hero__logo--video {
+  display: block;
+}
+
+/* On desktop the WebM's artwork reads slightly larger than the PNG (the video
+   is cropped tighter than the PNG's baked-in padding). Shrink it a touch so
+   both states feel the same size; layout is untouched (transform only). */
+@media (min-width: 768px) {
+  .hero__logo--video {
+    transform: scale(0.97);
+  }
+}
+
+.hero__promo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Fills its section, so the MOSAIC artwork matches the logo's scale. */
+.hero__promo-logo {
+  width: 100%;
+  height: auto;
+}
+
+/* MOSAIC's brand yellow — the one place the page steps outside its four-colour
+   palette, so it stays scoped to the hero register button. The margin gives
+   the bordered button a little breathing room in its section. */
+.hero__register {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px;
+  padding: 18px 32px;
+  border: 2px solid var(--black);
+  border-radius: var(--radius);
+  background: #eee500;
+  color: var(--black);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-align: center;
+  transition: background-color 0.2s var(--ease), transform 0.12s var(--ease);
+}
+
+.hero__register:hover {
+  background: #d9d000;
+}
+
+.hero__register:active {
+  transform: scale(0.98);
+}
+
+/* Same trick as the MOSAIC page: two stacked copies of the label, each showing
+   through a thin band for a couple of frames. A 1.9s cycle keeps it occasional
+   and off-beat from the heading animation. */
+.hero__register::before,
+.hero__register::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  clip-path: inset(100% 0 0 0);
+}
+
+.hero__register::before {
+  animation: hero-glitch-a 1.9s steps(1, end) infinite;
+}
+
+.hero__register::after {
+  animation: hero-glitch-b 1.9s steps(1, end) infinite;
+}
+
+/* Bands flicker for ~105ms, then the label is clean for the rest of the cycle.
+   Each track ends with an explicit hidden keyframe: steps(1, end) holds a
+   segment's *start* value, so without it the last band stays on all cycle. */
+@keyframes hero-glitch-a {
+  0%,
+  1.5%,
+  7%,
+  100% {
+    clip-path: inset(100% 0 0 0);
+    transform: none;
+  }
+  3% {
+    clip-path: inset(34% 0 40% 0);
+    transform: translate(-3px, -1px);
+  }
+  5% {
+    clip-path: inset(48% 0 18% 0);
+    transform: translate(3px, 1px);
+  }
+}
+
+@keyframes hero-glitch-b {
+  0%,
+  2%,
+  6.5%,
+  100% {
+    clip-path: inset(100% 0 0 0);
+    transform: none;
+  }
+  3.5% {
+    clip-path: inset(42% 0 32% 0);
+    transform: translate(3px, 1px);
+  }
+  5.5% {
+    clip-path: inset(58% 0 14% 0);
+    transform: translate(-3px, -1px);
+  }
+}
+
+.hero__tagline {
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--navy);
+}
+
+.hero__intro {
+  max-width: 480px;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.hero__scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--blue);
+}
+
+.hero__scroll-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.hero__scroll-icon {
+  display: inline-flex;
+  animation: nudge-down 2s var(--ease) infinite;
+}
+
+/* ------------------------------- responsive ------------------------------ */
+
+@media (max-width: 767px) {
+  .hero {
+    padding: calc(56px + 40px) 0 104px;
+  }
+
+  .hero__logo-wrap,
+  .hero__logo {
+    max-width: 300px;
+  }
+
+  /* Stacked with the button first: the MOSAIC artwork is dropped on mobile. */
+  .hero__top {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 28px;
+    max-width: 300px;
+  }
+
+  .hero__promo {
+    order: -1;
+  }
+
+  .hero__promo-logo {
+    display: none;
+  }
+
+  /* Slightly larger than the desktop button and as wide as the logo's visible
+     artwork — logo.png is a 482px-wide canvas whose mark only spans ~78% of it,
+     so matching the box here would read as wider than the logo. The inline
+     padding is tight because the fixed width, not the padding, sets the size
+     (and the 2px border eats into it). */
+  .hero__register {
+    width: 78.4%;
+    padding: 20px 8px;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  .hero__tagline {
+    font-size: 1.125rem;
+  }
+}
