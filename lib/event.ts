@@ -60,7 +60,6 @@ export const EVENT = {
     location: "St. Francis Institute of Technology, 6th floor, room 618",
     prizePool: "₹idk Cash Prize",
     teamFormat: "teams of 2-4",
-    eligibility: "Students of SFIT",
     entryFee: "₹70",
   },
 
@@ -94,7 +93,6 @@ export const DOSSIER_ROWS: { label: string; value: string }[] = [
   { label: "Event location", value: EVENT.dossier.location },
   { label: "Prize pool", value: EVENT.dossier.prizePool },
   { label: "Team format", value: EVENT.dossier.teamFormat },
-  { label: "Eligibility", value: EVENT.dossier.eligibility },
   { label: "Entry fee", value: EVENT.dossier.entryFee },
 ];
 
