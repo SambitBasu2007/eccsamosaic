@@ -56,7 +56,7 @@ export default function Footer() {
         </div>
 
         <div className="site-footer__base">
-          <p className="label">{EVENT.edition} · ECSSA</p>
+          <p className="label">{EVENT.edition} · ECSSA · Made by Sambit (ECSSA Tech EXEC)</p>
           <a className="label site-footer__top" href="#top">
             Back to top ↑
           </a>

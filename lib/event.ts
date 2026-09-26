@@ -56,11 +56,10 @@ export const EVENT = {
   /* --- Mission Dossier -------------------------------------------------- */
   dossier: {
     date: "16-17 October 2026",
-    venue: "St. Francis Institute of Technology, room no. 618",
     location: "St. Francis Institute of Technology, 6th floor, room 618",
     prizePool: "₹idk Cash Prize",
-    teamFormat: "teams of 2-4",
-    entryFee: "₹70",
+    teamFormat: "teams of 3-4",
+    entryFee: "150-200 per team",
   },
 
   /* --- Register --------------------------------------------------------- */
@@ -89,17 +88,18 @@ export const EVENT = {
 /** Label/value rows for the dossier grid, in presentation order. */
 export const DOSSIER_ROWS: { label: string; value: string }[] = [
   { label: "Event date", value: EVENT.dossier.date },
-  { label: "Venue", value: EVENT.dossier.venue },
   { label: "Event location", value: EVENT.dossier.location },
   { label: "Prize pool", value: EVENT.dossier.prizePool },
   { label: "Team format", value: EVENT.dossier.teamFormat },
   { label: "Entry fee", value: EVENT.dossier.entryFee },
 ];
 
-/** The three facts restated above the register CTA. */
+/** The facts restated above the register CTA. */
 export const REGISTER_FACTS: { label: string; value: string }[] = [
-  { label: "Entry fee", value: EVENT.dossier.entryFee },
-  { label: "Team format", value: EVENT.dossier.teamFormat },
+  
+  { label: "Team of 3", value: "₹150" },
+  { label: "Team of 4", value: "₹200" },
+  { label: "Team format", value: "teams of 3-4" },
 ];
 
 export type SocialIcon = (typeof EVENT.socials)[number]["icon"];

@@ -21,6 +21,18 @@
   border-bottom: 1px solid var(--hairline);
 }
 
+/* The anchor section earns a bigger title than the rest of the page. */
+.register .section-heading__title {
+  font-size: clamp(2.9rem, 9.5vw, 6.4rem);
+}
+
+.register__cta .btn {
+  min-height: 4rem;
+  padding: 1.05em 2.4em;
+  font-size: clamp(1rem, 2.4vw, 1.4rem);
+  letter-spacing: 0.24em;
+}
+
 .register__cta {
   display: flex;
   flex-wrap: wrap;

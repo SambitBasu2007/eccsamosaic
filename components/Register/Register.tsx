@@ -8,7 +8,7 @@ import "./Register.css";
 /**
  * Register — the anchor the hero CTA points at.
  *
- * Restates the three facts a visitor needs before committing, directly above the
+ * Restates the facts a visitor needs before committing, directly above the
  * button, so nobody has to scroll back up to find them.
  */
 export default function Register() {
