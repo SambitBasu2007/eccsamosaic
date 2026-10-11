@@ -90,7 +90,7 @@ export const EVENT = {
   socials: [
     { icon: "instagram", label: "Instagram", href: "https://www.instagram.com/team_ecssa" },
     { icon: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/company/ecssa-sfit/posts/" },
-    { icon: "whatsapp", label: "WhatsApp", href: "#" },
+    { icon: "whatsapp", label: "WhatsApp", href: "+918850239487" },
   ],
   footerLine: "THE SYSTEM IS FAILING.",
 } as const;
