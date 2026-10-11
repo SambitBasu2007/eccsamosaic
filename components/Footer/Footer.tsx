@@ -15,6 +15,14 @@ import "./Footer.css";
 export default function Footer() {
   const { contact } = EVENT;
 
+  const phoneHref = contact.phoneHref?.startsWith("tel:")
+    ? contact.phoneHref
+    : `tel:${(contact.phoneHref || contact.phone).replace(/\s+/g, "")}`;
+
+  const emailHref = contact.emailHref?.startsWith("mailto:")
+    ? contact.emailHref
+    : `mailto:${(contact.emailHref || contact.email).trim()}`;
+
   return (
     <footer className="section section--crisis site-footer" id="contact">
       <SectionBackdrop src={ASSETS.scenery.planet} focal="50% 30%" />
@@ -29,13 +37,13 @@ export default function Footer() {
             <p className="site-footer__value">{contact.name}</p>
             <ul className="site-footer__links">
               <li>
-                <a className="site-footer__link" href={`${contact.phoneHref}${contact.phone}`}>
+                <a className="site-footer__link" href={phoneHref}>
                   <ContactIcon name="phone" />
                   <span>{contact.phone}</span>
                 </a>
               </li>
               <li>
-                <a className="site-footer__link" href={`${contact.emailHref}${contact.email}`}>
+                <a className="site-footer__link" href={emailHref}>
                   <ContactIcon name="mail" />
                   <span>{contact.email}</span>
                 </a>

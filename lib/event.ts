@@ -82,10 +82,10 @@ export const EVENT = {
   /* --- Footer ----------------------------------------------------------- */
   contact: {
     name: "ECSSA · Electronics and Computer Science Student Association",
-    phone: "[Phone no]",
-    email: "[Email]",
-    emailHref: "ecssa@sfit.ac.in",
-    phoneHref: "8850239487",
+    phone: "+91 88502 39487",
+    email: "ecssa@sfit.ac.in",
+    emailHref: "mailto:ecssa@sfit.ac.in",
+    phoneHref: "tel:+918850239487",
   },
   socials: [
     { icon: "instagram", label: "Instagram", href: "https://www.instagram.com/team_ecssa" },

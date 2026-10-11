@@ -29,7 +29,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 1.4rem;
-  min-height: clamp(11rem, 31svh, 21rem);
+  min-height: clamp(22rem, 62svh, 42rem);
   padding-block: clamp(2rem, 6vh, 4rem);
 }
 
@@ -115,4 +115,5 @@
     opacity: 0.9;
   }
 }
+
 
