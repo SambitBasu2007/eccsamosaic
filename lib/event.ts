@@ -66,14 +66,14 @@ export const EVENT = {
     date: "16–17 OCTOBER 2026",
     location: "St. Francis Institute of Technology · 6th Floor · Room 618",
     teamSize: "3–4 members",
-    entryFeeTeam3: "Team of 3 — ₹150",
-    entryFeeTeam4: "Team of 4 — ₹200",
+    entryFeeTeam3: "Team of 3 — ₹195",
+    entryFeeTeam4: "Team of 4 — ₹250",
   },
 
   /* --- Register --------------------------------------------------------- */
   register: {
     status: "MISSION STATUS OPEN FOR REGISTRATION",
-    url: "#",
+    url: "https://mosaic-snowy-five.vercel.app/#events:~:text=ecssa.sh",
     ctaLabel: "REGISTER NOW",
     closing:
       "The transmission has been recovered. The coordinates are known. The crisis isn't waiting. Gather your team. Enter Petrova.",
@@ -106,8 +106,8 @@ export const DOSSIER_ROWS: { id: string; label: string; value: string }[] = [
 
 /** The facts restated above the register CTA. */
 export const REGISTER_FACTS: { label: string; value: string }[] = [
-  { label: "Team of 3", value: "₹150" },
-  { label: "Team of 4", value: "₹200" },
+  { label: "Team of 3", value: "₹195" },
+  { label: "Team of 4", value: "₹250" },
 ];
 
 export type SocialIcon = (typeof EVENT.socials)[number]["icon"];

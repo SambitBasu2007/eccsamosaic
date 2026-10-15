@@ -13,7 +13,7 @@ import "./HeroRegister.css";
  */
 export default function HeroRegister() {
   return (
-    <a className="hero-register hud-control" href="#register" data-debris-obstacle>
+    <a className="hero-register hud-control" href="https://mosaic-snowy-five.vercel.app/#events:~:text=ecssa.sh" data-debris-obstacle>
       <span className="hero-register__bracket" aria-hidden="true">
         [
       </span>
